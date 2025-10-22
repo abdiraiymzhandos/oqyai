@@ -1,0 +1,32 @@
+name: oqyai
+description: A new Flutter project.
+publish_to: 'none'
+
+version: 1.0.2+3
+
+environment:
+  sdk: '^3.8.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Обновлено для исправления ошибки сборки и получения нового API
+  webview_flutter: ^4.8.0
+  url_launcher: ^6.3.0
+  permission_handler: ^11.3.0
+
+dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+
+# Конфигурация для пакета flutter_launcher_icons
+# Убедитесь, что файл "assets/icon/app_icon.png" существует в вашем проекте
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+
+flutter:
+  uses-material-design: true
+  assets:
+    # Явное указание файла ассета
+    - assets/icon/app_icon.png
