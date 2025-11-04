@@ -2,7 +2,7 @@ name: oqyai
 description: A new Flutter project.
 publish_to: 'none'
 
-version: 1.0.4+1   # << мұны өсір
+version: 1.0.4+2   # << мұны өсір
 
 environment:
   sdk: '^3.8.0'

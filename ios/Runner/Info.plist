@@ -45,7 +45,21 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>AI мұғаліммен сөйлесу үшін микрофонға рұқсат қажет.</string>
+
+	<!-- Microphone permission -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>AI мұғаліммен сөйлесу үшін микрофонға рұқсат қажет.</string>
+
+	<!-- Export compliance (no special encryption) -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+
+	<!-- ATS: only secure HTTPS traffic -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+
 </dict>
 </plist>
