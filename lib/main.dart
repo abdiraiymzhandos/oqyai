@@ -29,6 +29,10 @@ class WebViewScreen extends StatefulWidget {
 class _WebViewScreenState extends State<WebViewScreen> {
   late final WebViewController _c;
 
+  // Қалқымалы профиль түймесінің ағымдағы орны
+  Offset _fab = Offset.zero;
+  bool _fabPosInit = false;
+
   bool _isExternal(String url) {
     final u = Uri.parse(url);
     final host = u.host.toLowerCase();
@@ -136,12 +140,73 @@ class _WebViewScreenState extends State<WebViewScreen> {
     }
   }
 
+  // Профиль бетін ашу (онда аккаунтты жою бар)
+  void _openProfile() {
+    _c.loadRequest(Uri.parse('https://www.oqyai.kz/profile'));
+  }
+
+  // Экран өлшеміне қарай FAB-тың бастапқы орнын бір рет есептеу
+  void _ensureFabStartPosition(BuildContext context) {
+    if (_fabPosInit) return;
+    final size = MediaQuery.of(context).size;
+    const fabSize = 56.0;
+    const margin = 20.0;
+    // Оң жақ төмен
+    _fab = Offset(size.width - fabSize - margin, size.height - fabSize - margin - 24);
+    _fabPosInit = true;
+  }
+
+  // Сүйреп жылжыту
+  void _onDragUpdate(DragUpdateDetails d) {
+    final size = MediaQuery.of(context).size;
+    const fabSize = 56.0;
+    const pad = 12.0;
+
+    final nx = (_fab.dx + d.delta.dx).clamp(pad, size.width - fabSize - pad);
+    final ny = (_fab.dy + d.delta.dy).clamp(pad, size.height - fabSize - pad);
+
+    setState(() {
+      _fab = Offset(nx, ny);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    _ensureFabStartPosition(context);
+
     return Scaffold(
-      body: SafeArea(
-        // Используем WebViewWidget для отображения
-        child: WebViewWidget(controller: _c),
+      body: Stack(
+        children: [
+          // Негізгі WebView толық экран
+          SafeArea(
+            child: WebViewWidget(controller: _c),
+          ),
+
+          // Қалқымалы профиль иконкасы (WebView-ге кедергі келтірмейді)
+          Positioned(
+            left: _fab.dx,
+            top: _fab.dy,
+            child: GestureDetector(
+              onPanUpdate: _onDragUpdate,
+              child: Material(
+                elevation: 6,
+                shape: const CircleBorder(),
+                color: Colors.white.withOpacity(0.95),
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: _openProfile,
+                  child: const SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: Center(
+                      child: Icon(Icons.person, size: 26, color: Colors.black87),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
